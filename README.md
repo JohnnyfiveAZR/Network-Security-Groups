@@ -1,54 +1,62 @@
-<p align="center">
-<img src="https://i.imgur.com/Ua7udoS.png" alt="Traffic Examination"/>
-</p>
-
-<h1>Network Security Groups (NSGs) and Inspecting Traffic Between Azure Virtual Machines</h1>
-In this tutorial, we observe various network traffic to and from Azure Virtual Machines with Wireshark as well as experiment with Network Security Groups. <br />
-
-
-
-<h2>Environments and Technologies Used</h2>
-
-- Microsoft Azure (Virtual Machines/Compute)
-- Remote Desktop
-- Various Command-Line Tools
-- Various Network Protocols (SSH, RDH, DNS, HTTP/S, ICMP)
-- Wireshark (Protocol Analyzer)
-
-<h2>Operating Systems Used </h2>
-
-- Windows 10 (21H2)
-- Ubuntu Server 20.04
-
-<h2>High-Level Steps</h2>
-
-- Step 1
-- Step 2
-- Step 3
-- Step 4
-
-<h2>Actions and Observations</h2>
-
+<!-- Network Security Groups -->
+<h2>Network Security Groups (NSGs)</h2>
 <p>
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+  Network Security Groups (NSGs) are critical for controlling inbound and outbound traffic to your Azure Virtual Machines. Proper configuration ensures your Active Directory lab remains secure while allowing necessary services.
 </p>
-<p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-</p>
-<br />
 
-<p>
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-</p>
-<p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-</p>
-<br />
+<h3>Recommended NSG Configuration</h3>
+<ul>
+  <li>🔹 <strong>Domain Controller (DC-1)</strong>
+    <ul>
+      <li>Inbound Rules:
+        <ul>
+          <li>RDP (TCP 3389) - Allow from your IP only</li>
+          <li>DNS (TCP/UDP 53) - Allow from Client subnet</li>
+          <li>LDAP (TCP 389) - Allow from Client subnet</li>
+          <li>Kerberos (TCP/UDP 88) - Allow from Client subnet</li>
+          <li>SMB (TCP 445) - Allow from Client subnet if file sharing needed</li>
+        </ul>
+      </li>
+      <li>Outbound Rules: Default allow all</li>
+    </ul>
+  </li>
+  <li>🔹 <strong>Client VM (Client-1)</strong>
+    <ul>
+      <li>Inbound Rules:
+        <ul>
+          <li>RDP (TCP 3389) - Allow from your IP only</li>
+        </ul>
+      </li>
+      <li>Outbound Rules:
+        <ul>
+          <li>Allow TCP/UDP 53 (DNS) to DC-1</li>
+          <li>Allow TCP 88, 389, 445 to DC-1</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
 
+<h3>Security Best Practices</h3>
+<ul>
+  <li>🛡 Limit RDP access to trusted IP addresses only.</li>
+  <li>🛡 Apply the principle of least privilege for NSG rules.</li>
+  <li>🛡 Monitor NSG logs in Azure to detect unauthorized access attempts.</li>
+  <li>🛡 Separate subnets for Domain Controllers and Clients to isolate traffic.</li>
+</ul>
+
+<hr style="border-color:#00e0ff;"/>
+
+<!-- Conclusion -->
+<h2>Conclusion</h2>
 <p>
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+  By following this guide, you now have a fully functional, isolated Active Directory lab environment in Azure. The combination of proper NSG configuration and domain setup ensures both usability and security for testing and learning purposes.
 </p>
-<p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+
+<!-- Footer -->
+<p style="text-align:center; color:#888;">
+  <p style="text-align:center; color:#888;">
+  🔒 Crafted by <strong>Jonathan Taylor</strong>
 </p>
-<br />
+
+</p>
